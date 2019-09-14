@@ -41,7 +41,7 @@ var Broadcaster = /** @class */ (function () {
                         queryRunner: _this.queryRunner,
                         manager: _this.queryRunner.manager,
                         entity: entity,
-                        metadata: metadata
+                        metadata: metadata,
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -60,6 +60,7 @@ var Broadcaster = /** @class */ (function () {
      */
     Broadcaster.prototype.broadcastBeforeUpdateEvent = function (result, metadata, entity, databaseEntity, updatedColumns, updatedRelations) {
         var _this = this;
+        // todo: send relations too?
         if (entity && metadata.beforeUpdateListeners.length) {
             metadata.beforeUpdateListeners.forEach(function (listener) {
                 if (listener.isAllowed(entity)) {
@@ -81,7 +82,7 @@ var Broadcaster = /** @class */ (function () {
                         metadata: metadata,
                         databaseEntity: databaseEntity,
                         updatedColumns: updatedColumns || [],
-                        updatedRelations: updatedRelations || []
+                        updatedRelations: updatedRelations || [],
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -98,7 +99,7 @@ var Broadcaster = /** @class */ (function () {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    Broadcaster.prototype.broadcastBeforeRemoveEvent = function (result, metadata, entity, databaseEntity) {
+    Broadcaster.prototype.broadcastBeforeRemoveEvent = function (result, metadata, entity, databaseEntity, queryAndParameters) {
         var _this = this;
         if (entity && metadata.beforeRemoveListeners.length) {
             metadata.beforeRemoveListeners.forEach(function (listener) {
@@ -120,7 +121,8 @@ var Broadcaster = /** @class */ (function () {
                         entity: entity,
                         metadata: metadata,
                         databaseEntity: databaseEntity,
-                        entityId: metadata.getEntityIdMixedMap(databaseEntity)
+                        entityId: metadata.getEntityIdMixedMap(databaseEntity),
+                        queryAndParameters: queryAndParameters,
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -157,7 +159,7 @@ var Broadcaster = /** @class */ (function () {
                         queryRunner: _this.queryRunner,
                         manager: _this.queryRunner.manager,
                         entity: entity,
-                        metadata: metadata
+                        metadata: metadata,
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -197,7 +199,7 @@ var Broadcaster = /** @class */ (function () {
                         metadata: metadata,
                         databaseEntity: databaseEntity,
                         updatedColumns: updatedColumns || [],
-                        updatedRelations: updatedRelations || []
+                        updatedRelations: updatedRelations || [],
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -236,7 +238,7 @@ var Broadcaster = /** @class */ (function () {
                         entity: entity,
                         metadata: metadata,
                         databaseEntity: databaseEntity,
-                        entityId: metadata.getEntityIdMixedMap(databaseEntity)
+                        entityId: metadata.getEntityIdMixedMap(databaseEntity),
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -256,7 +258,8 @@ var Broadcaster = /** @class */ (function () {
     Broadcaster.prototype.broadcastLoadEventsForAll = function (result, metadata, entities) {
         var _this = this;
         entities.forEach(function (entity) {
-            if (entity instanceof Promise) // todo: check why need this?
+            if (entity instanceof Promise)
+                // todo: check why need this?
                 return;
             // collect load events for all children entities that were loaded with the main entity
             if (metadata.relations.length) {
@@ -287,7 +290,7 @@ var Broadcaster = /** @class */ (function () {
                             queryRunner: _this.queryRunner,
                             manager: _this.queryRunner.manager,
                             entity: entity,
-                            metadata: metadata
+                            metadata: metadata,
                         });
                         if (executionResult instanceof Promise)
                             result.promises.push(executionResult);
@@ -305,11 +308,11 @@ var Broadcaster = /** @class */ (function () {
      * or listens our entity.
      */
     Broadcaster.prototype.isAllowedSubscriber = function (subscriber, target) {
-        return !subscriber.listenTo ||
+        return (!subscriber.listenTo ||
             !subscriber.listenTo() ||
             subscriber.listenTo() === Object ||
             subscriber.listenTo() === target ||
-            subscriber.listenTo().isPrototypeOf(target);
+            subscriber.listenTo().isPrototypeOf(target));
     };
     return Broadcaster;
 }());

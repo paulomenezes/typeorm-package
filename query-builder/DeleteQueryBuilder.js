@@ -47,22 +47,20 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
                         _a = tslib_1.__read(this.getQueryAndParameters(), 2), sql = _a[0], parameters = _a[1];
                         queryRunner = this.obtainQueryRunner();
                         transactionStartedByUs = false;
-                        console.log("DeleteQueryBuilder", sql, parameters);
+                        console.log('DeleteQueryBuilder', sql, parameters);
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 11, 16, 21]);
-                        if (!(this.expressionMap.useTransaction === true &&
-                            queryRunner.isTransactionActive === false)) return [3 /*break*/, 3];
+                        if (!(this.expressionMap.useTransaction === true && queryRunner.isTransactionActive === false)) return [3 /*break*/, 3];
                         return [4 /*yield*/, queryRunner.startTransaction()];
                     case 2:
                         _b.sent();
                         transactionStartedByUs = true;
                         _b.label = 3;
                     case 3:
-                        if (!(this.expressionMap.callListeners === true &&
-                            this.expressionMap.mainAlias.hasMetadata)) return [3 /*break*/, 5];
+                        if (!(this.expressionMap.callListeners === true && this.expressionMap.mainAlias.hasMetadata)) return [3 /*break*/, 5];
                         broadcastResult = new BroadcasterResult_1.BroadcasterResult();
-                        queryRunner.broadcaster.broadcastBeforeRemoveEvent(broadcastResult, this.expressionMap.mainAlias.metadata);
+                        queryRunner.broadcaster.broadcastBeforeRemoveEvent(broadcastResult, this.expressionMap.mainAlias.metadata, undefined, undefined, [sql, parameters]);
                         if (!(broadcastResult.promises.length > 0)) return [3 /*break*/, 5];
                         return [4 /*yield*/, Promise.all(broadcastResult.promises)];
                     case 4:
@@ -83,8 +81,7 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
                             driver instanceof CockroachDriver_1.CockroachDriver) {
                             deleteResult.raw = result[0] ? result[0] : null;
                             // don't return 0 because it could confuse. null means that we did not receive this value
-                            deleteResult.affected =
-                                typeof result[1] === "number" ? result[1] : null;
+                            deleteResult.affected = typeof result[1] === 'number' ? result[1] : null;
                         }
                         else if (driver instanceof OracleDriver_1.OracleDriver) {
                             deleteResult.affected = result;
@@ -92,8 +89,7 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
                         else {
                             deleteResult.raw = result;
                         }
-                        if (!(this.expressionMap.callListeners === true &&
-                            this.expressionMap.mainAlias.hasMetadata)) return [3 /*break*/, 8];
+                        if (!(this.expressionMap.callListeners === true && this.expressionMap.mainAlias.hasMetadata)) return [3 /*break*/, 8];
                         broadcastResult = new BroadcasterResult_1.BroadcasterResult();
                         queryRunner.broadcaster.broadcastAfterRemoveEvent(broadcastResult, this.expressionMap.mainAlias.metadata);
                         if (!(broadcastResult.promises.length > 0)) return [3 /*break*/, 8];
@@ -131,8 +127,7 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
                         _b.sent();
                         _b.label = 18;
                     case 18:
-                        if (!(this.connection.driver instanceof SqljsDriver_1.SqljsDriver &&
-                            !queryRunner.isTransactionActive)) return [3 /*break*/, 20];
+                        if (!(this.connection.driver instanceof SqljsDriver_1.SqljsDriver && !queryRunner.isTransactionActive)) return [3 /*break*/, 20];
                         return [4 /*yield*/, this.connection.driver.autoSave()];
                     case 19:
                         _b.sent();
@@ -151,10 +146,7 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
      * Also sets a main string alias of the selection data.
      */
     DeleteQueryBuilder.prototype.from = function (entityTarget, aliasName) {
-        entityTarget =
-            entityTarget instanceof index_1.EntitySchema
-                ? entityTarget.options.name
-                : entityTarget;
+        entityTarget = entityTarget instanceof index_1.EntitySchema ? entityTarget.options.name : entityTarget;
         var mainAlias = this.createFromAlias(entityTarget, aliasName);
         this.expressionMap.setMainAlias(mainAlias);
         return this;
@@ -169,9 +161,7 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
         this.expressionMap.wheres = []; // don't move this block below since computeWhereParameter can add where expressions
         var condition = this.computeWhereParameter(where);
         if (condition)
-            this.expressionMap.wheres = [
-                { type: "simple", condition: condition }
-            ];
+            this.expressionMap.wheres = [{ type: 'simple', condition: condition }];
         if (parameters)
             this.setParameters(parameters);
         return this;
@@ -182,8 +172,8 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
      */
     DeleteQueryBuilder.prototype.andWhere = function (where, parameters) {
         this.expressionMap.wheres.push({
-            type: "and",
-            condition: this.computeWhereParameter(where)
+            type: 'and',
+            condition: this.computeWhereParameter(where),
         });
         if (parameters)
             this.setParameters(parameters);
@@ -195,8 +185,8 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
      */
     DeleteQueryBuilder.prototype.orWhere = function (where, parameters) {
         this.expressionMap.wheres.push({
-            type: "or",
-            condition: this.computeWhereParameter(where)
+            type: 'or',
+            condition: this.computeWhereParameter(where),
         });
         if (parameters)
             this.setParameters(parameters);
@@ -247,12 +237,10 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
         var whereExpression = this.createWhereExpression();
         var returningExpression = this.createReturningExpression();
         if (returningExpression &&
-            (this.connection.driver instanceof PostgresDriver_1.PostgresDriver ||
-                this.connection.driver instanceof CockroachDriver_1.CockroachDriver)) {
+            (this.connection.driver instanceof PostgresDriver_1.PostgresDriver || this.connection.driver instanceof CockroachDriver_1.CockroachDriver)) {
             return "DELETE FROM " + tableName + whereExpression + " RETURNING " + returningExpression;
         }
-        else if (returningExpression !== "" &&
-            this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver) {
+        else if (returningExpression !== '' && this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver) {
             return "DELETE FROM " + tableName + " OUTPUT " + returningExpression + whereExpression;
         }
         else {

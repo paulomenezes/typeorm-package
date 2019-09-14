@@ -1,12 +1,12 @@
-import { QueryBuilder } from "./QueryBuilder";
-import { ObjectLiteral } from "../common/ObjectLiteral";
-import { ObjectType } from "../common/ObjectType";
-import { Connection } from "../connection/Connection";
-import { QueryRunner } from "../query-runner/QueryRunner";
-import { WhereExpression } from "./WhereExpression";
-import { Brackets } from "./Brackets";
-import { DeleteResult } from "./result/DeleteResult";
-import { EntitySchema } from "../index";
+import { QueryBuilder } from './QueryBuilder';
+import { ObjectLiteral } from '../common/ObjectLiteral';
+import { ObjectType } from '../common/ObjectType';
+import { Connection } from '../connection/Connection';
+import { QueryRunner } from '../query-runner/QueryRunner';
+import { WhereExpression } from './WhereExpression';
+import { Brackets } from './Brackets';
+import { DeleteResult } from './result/DeleteResult';
+import { EntitySchema } from '../index';
 /**
  * Allows to build complex sql queries in a fashion way and execute those queries.
  */

@@ -1,10 +1,10 @@
-import { EntitySubscriberInterface } from "./EntitySubscriberInterface";
-import { ObjectLiteral } from "../common/ObjectLiteral";
-import { QueryRunner } from "../query-runner/QueryRunner";
-import { EntityMetadata } from "../metadata/EntityMetadata";
-import { BroadcasterResult } from "./BroadcasterResult";
-import { ColumnMetadata } from "../metadata/ColumnMetadata";
-import { RelationMetadata } from "../metadata/RelationMetadata";
+import { EntitySubscriberInterface } from './EntitySubscriberInterface';
+import { ObjectLiteral } from '../common/ObjectLiteral';
+import { QueryRunner } from '../query-runner/QueryRunner';
+import { EntityMetadata } from '../metadata/EntityMetadata';
+import { BroadcasterResult } from './BroadcasterResult';
+import { ColumnMetadata } from '../metadata/ColumnMetadata';
+import { RelationMetadata } from '../metadata/RelationMetadata';
 /**
  * Broadcaster provides a helper methods to broadcast events to the subscribers.
  */
@@ -37,7 +37,7 @@ export declare class Broadcaster {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    broadcastBeforeRemoveEvent(result: BroadcasterResult, metadata: EntityMetadata, entity?: ObjectLiteral, databaseEntity?: ObjectLiteral): void;
+    broadcastBeforeRemoveEvent(result: BroadcasterResult, metadata: EntityMetadata, entity?: ObjectLiteral, databaseEntity?: ObjectLiteral, queryAndParameters?: [string, any[]]): void;
     /**
      * Broadcasts "AFTER_INSERT" event.
      * After insert event is executed after entity is being persisted to the database for the first time.

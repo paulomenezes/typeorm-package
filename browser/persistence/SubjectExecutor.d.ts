@@ -1,8 +1,8 @@
-import { QueryRunner } from "../query-runner/QueryRunner";
-import { Subject } from "./Subject";
-import { SaveOptions } from "../repository/SaveOptions";
-import { RemoveOptions } from "../repository/RemoveOptions";
-import { BroadcasterResult } from "../subscriber/BroadcasterResult";
+import { QueryRunner } from '../query-runner/QueryRunner';
+import { Subject } from './Subject';
+import { SaveOptions } from '../repository/SaveOptions';
+import { RemoveOptions } from '../repository/RemoveOptions';
+import { BroadcasterResult } from '../subscriber/BroadcasterResult';
 /**
  * Executes all database operations (inserts, updated, deletes) that must be executed
  * with given persistence subjects.
@@ -95,7 +95,7 @@ export declare class SubjectExecutor {
      * Other drivers like postgres and sql server support RETURNING / OUTPUT statement which allows to return generated
      * id for each inserted row, that's why bulk insertion is not limited to junction tables in there.
      */
-    protected groupBulkSubjects(subjects: Subject[], type: "insert" | "delete"): [{
+    protected groupBulkSubjects(subjects: Subject[], type: 'insert' | 'delete'): [{
         [key: string]: Subject[];
     }, string[]];
 }
