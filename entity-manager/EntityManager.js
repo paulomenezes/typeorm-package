@@ -307,7 +307,7 @@ var EntityManager = /** @class */ (function () {
      * Does not check if entity exist in the database.
      * Condition(s) cannot be empty.
      */
-    EntityManager.prototype.delete = function (targetOrEntity, criteria) {
+    EntityManager.prototype.delete = function (targetOrEntity, criteria, userLogin) {
         // if user passed empty criteria or empty list of criterias, then throw an error
         if (criteria === undefined ||
             criteria === null ||
@@ -323,14 +323,14 @@ var EntityManager = /** @class */ (function () {
                 .delete()
                 .from(targetOrEntity)
                 .whereInIds(criteria)
-                .execute();
+                .execute(userLogin);
         }
         else {
             return this.createQueryBuilder()
                 .delete()
                 .from(targetOrEntity)
                 .where(criteria)
-                .execute();
+                .execute(userLogin);
         }
     };
     /**

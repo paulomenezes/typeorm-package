@@ -35,13 +35,14 @@ var Broadcaster = /** @class */ (function () {
         }
         if (this.queryRunner.connection.subscribers.length) {
             this.queryRunner.connection.subscribers.forEach(function (subscriber) {
-                if (_this.isAllowedSubscriber(subscriber, metadata.target) && subscriber.beforeInsert) {
+                if (_this.isAllowedSubscriber(subscriber, metadata.target) &&
+                    subscriber.beforeInsert) {
                     var executionResult = subscriber.beforeInsert({
                         connection: _this.queryRunner.connection,
                         queryRunner: _this.queryRunner,
                         manager: _this.queryRunner.manager,
                         entity: entity,
-                        metadata: metadata,
+                        metadata: metadata
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -73,7 +74,8 @@ var Broadcaster = /** @class */ (function () {
         }
         if (this.queryRunner.connection.subscribers.length) {
             this.queryRunner.connection.subscribers.forEach(function (subscriber) {
-                if (_this.isAllowedSubscriber(subscriber, metadata.target) && subscriber.beforeUpdate) {
+                if (_this.isAllowedSubscriber(subscriber, metadata.target) &&
+                    subscriber.beforeUpdate) {
                     var executionResult = subscriber.beforeUpdate({
                         connection: _this.queryRunner.connection,
                         queryRunner: _this.queryRunner,
@@ -82,7 +84,7 @@ var Broadcaster = /** @class */ (function () {
                         metadata: metadata,
                         databaseEntity: databaseEntity,
                         updatedColumns: updatedColumns || [],
-                        updatedRelations: updatedRelations || [],
+                        updatedRelations: updatedRelations || []
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -99,7 +101,7 @@ var Broadcaster = /** @class */ (function () {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    Broadcaster.prototype.broadcastBeforeRemoveEvent = function (result, metadata, entity, databaseEntity, queryAndParameters) {
+    Broadcaster.prototype.broadcastBeforeRemoveEvent = function (result, metadata, entity, databaseEntity, queryAndParameters, userLogin) {
         var _this = this;
         if (entity && metadata.beforeRemoveListeners.length) {
             metadata.beforeRemoveListeners.forEach(function (listener) {
@@ -113,7 +115,8 @@ var Broadcaster = /** @class */ (function () {
         }
         if (this.queryRunner.connection.subscribers.length) {
             this.queryRunner.connection.subscribers.forEach(function (subscriber) {
-                if (_this.isAllowedSubscriber(subscriber, metadata.target) && subscriber.beforeRemove) {
+                if (_this.isAllowedSubscriber(subscriber, metadata.target) &&
+                    subscriber.beforeRemove) {
                     var executionResult = subscriber.beforeRemove({
                         connection: _this.queryRunner.connection,
                         queryRunner: _this.queryRunner,
@@ -123,6 +126,7 @@ var Broadcaster = /** @class */ (function () {
                         databaseEntity: databaseEntity,
                         entityId: metadata.getEntityIdMixedMap(databaseEntity),
                         queryAndParameters: queryAndParameters,
+                        userLogin: userLogin
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -153,13 +157,14 @@ var Broadcaster = /** @class */ (function () {
         }
         if (this.queryRunner.connection.subscribers.length) {
             this.queryRunner.connection.subscribers.forEach(function (subscriber) {
-                if (_this.isAllowedSubscriber(subscriber, metadata.target) && subscriber.afterInsert) {
+                if (_this.isAllowedSubscriber(subscriber, metadata.target) &&
+                    subscriber.afterInsert) {
                     var executionResult = subscriber.afterInsert({
                         connection: _this.queryRunner.connection,
                         queryRunner: _this.queryRunner,
                         manager: _this.queryRunner.manager,
                         entity: entity,
-                        metadata: metadata,
+                        metadata: metadata
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -190,7 +195,8 @@ var Broadcaster = /** @class */ (function () {
         }
         if (this.queryRunner.connection.subscribers.length) {
             this.queryRunner.connection.subscribers.forEach(function (subscriber) {
-                if (_this.isAllowedSubscriber(subscriber, metadata.target) && subscriber.afterUpdate) {
+                if (_this.isAllowedSubscriber(subscriber, metadata.target) &&
+                    subscriber.afterUpdate) {
                     var executionResult = subscriber.afterUpdate({
                         connection: _this.queryRunner.connection,
                         queryRunner: _this.queryRunner,
@@ -199,7 +205,7 @@ var Broadcaster = /** @class */ (function () {
                         metadata: metadata,
                         databaseEntity: databaseEntity,
                         updatedColumns: updatedColumns || [],
-                        updatedRelations: updatedRelations || [],
+                        updatedRelations: updatedRelations || []
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -230,7 +236,8 @@ var Broadcaster = /** @class */ (function () {
         }
         if (this.queryRunner.connection.subscribers.length) {
             this.queryRunner.connection.subscribers.forEach(function (subscriber) {
-                if (_this.isAllowedSubscriber(subscriber, metadata.target) && subscriber.afterRemove) {
+                if (_this.isAllowedSubscriber(subscriber, metadata.target) &&
+                    subscriber.afterRemove) {
                     var executionResult = subscriber.afterRemove({
                         connection: _this.queryRunner.connection,
                         queryRunner: _this.queryRunner,
@@ -238,7 +245,7 @@ var Broadcaster = /** @class */ (function () {
                         entity: entity,
                         metadata: metadata,
                         databaseEntity: databaseEntity,
-                        entityId: metadata.getEntityIdMixedMap(databaseEntity),
+                        entityId: metadata.getEntityIdMixedMap(databaseEntity)
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -265,7 +272,8 @@ var Broadcaster = /** @class */ (function () {
             if (metadata.relations.length) {
                 metadata.relations.forEach(function (relation) {
                     // in lazy relations we cannot simply access to entity property because it will cause a getter and a database query
-                    if (relation.isLazy && !entity.hasOwnProperty(relation.propertyName))
+                    if (relation.isLazy &&
+                        !entity.hasOwnProperty(relation.propertyName))
                         return;
                     var value = relation.getEntityValue(entity);
                     if (value instanceof Object)
@@ -284,13 +292,14 @@ var Broadcaster = /** @class */ (function () {
             }
             if (_this.queryRunner.connection.subscribers.length) {
                 _this.queryRunner.connection.subscribers.forEach(function (subscriber) {
-                    if (_this.isAllowedSubscriber(subscriber, metadata.target) && subscriber.afterLoad) {
+                    if (_this.isAllowedSubscriber(subscriber, metadata.target) &&
+                        subscriber.afterLoad) {
                         var executionResult = subscriber.afterLoad(entity, {
                             connection: _this.queryRunner.connection,
                             queryRunner: _this.queryRunner,
                             manager: _this.queryRunner.manager,
                             entity: entity,
-                            metadata: metadata,
+                            metadata: metadata
                         });
                         if (executionResult instanceof Promise)
                             result.promises.push(executionResult);

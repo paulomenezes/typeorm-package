@@ -1,7 +1,7 @@
-import { EntityManager } from '../../entity-manager/EntityManager';
-import { Connection } from '../../connection/Connection';
-import { QueryRunner } from '../../query-runner/QueryRunner';
-import { EntityMetadata } from '../../metadata/EntityMetadata';
+import { EntityManager } from "../../entity-manager/EntityManager";
+import { Connection } from "../../connection/Connection";
+import { QueryRunner } from "../../query-runner/QueryRunner";
+import { EntityMetadata } from "../../metadata/EntityMetadata";
 /**
  * RemoveEvent is an object that broadcaster sends to the entity subscriber when entity is being removed to the database.
  */
@@ -38,7 +38,11 @@ export interface RemoveEvent<Entity> {
      */
     entityId?: any;
     /**
-     * Query and parameters used for remove
+     * Query and parameters used to remove
      */
     queryAndParameters?: [string, any[]];
+    /**
+     * User who remove
+     */
+    userLogin?: string;
 }

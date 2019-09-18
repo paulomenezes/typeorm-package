@@ -15,7 +15,9 @@ var DbQueryResultCache = /** @class */ (function () {
     function DbQueryResultCache(connection) {
         this.connection = connection;
         var options = this.connection.driver.options;
-        var cacheOptions = typeof this.connection.options.cache === "object" ? this.connection.options.cache : {};
+        var cacheOptions = typeof this.connection.options.cache === "object"
+            ? this.connection.options.cache
+            : {};
         var cacheTableName = cacheOptions.tableName || "query-result-cache";
         this.queryResultCacheTable = this.connection.driver.buildTableName(cacheTableName, options.schema, options.database);
     }
@@ -26,21 +28,17 @@ var DbQueryResultCache = /** @class */ (function () {
      * Creates a connection with given cache provider.
      */
     DbQueryResultCache.prototype.connect = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
+        return tslib_1.__awaiter(this, void 0, void 0, function () { return tslib_1.__generator(this, function (_a) {
+            return [2 /*return*/];
+        }); });
     };
     /**
      * Disconnects with given cache provider.
      */
     DbQueryResultCache.prototype.disconnect = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
+        return tslib_1.__awaiter(this, void 0, void 0, function () { return tslib_1.__generator(this, function (_a) {
+            return [2 /*return*/];
+        }); });
     };
     /**
      * Creates table for storing cache if it does not exist yet.
@@ -65,38 +63,50 @@ var DbQueryResultCache = /** @class */ (function () {
                                         name: "id",
                                         isPrimary: true,
                                         isNullable: false,
-                                        type: driver.normalizeType({ type: driver.mappedDataTypes.cacheId }),
+                                        type: driver.normalizeType({
+                                            type: driver.mappedDataTypes.cacheId
+                                        }),
                                         generationStrategy: "increment",
                                         isGenerated: true
                                     },
                                     {
                                         name: "identifier",
-                                        type: driver.normalizeType({ type: driver.mappedDataTypes.cacheIdentifier }),
+                                        type: driver.normalizeType({
+                                            type: driver.mappedDataTypes.cacheIdentifier
+                                        }),
                                         isNullable: true
                                     },
                                     {
                                         name: "time",
-                                        type: driver.normalizeType({ type: driver.mappedDataTypes.cacheTime }),
+                                        type: driver.normalizeType({
+                                            type: driver.mappedDataTypes.cacheTime
+                                        }),
                                         isPrimary: false,
                                         isNullable: false
                                     },
                                     {
                                         name: "duration",
-                                        type: driver.normalizeType({ type: driver.mappedDataTypes.cacheDuration }),
+                                        type: driver.normalizeType({
+                                            type: driver.mappedDataTypes.cacheDuration
+                                        }),
                                         isPrimary: false,
                                         isNullable: false
                                     },
                                     {
                                         name: "query",
-                                        type: driver.normalizeType({ type: driver.mappedDataTypes.cacheQuery }),
+                                        type: driver.normalizeType({
+                                            type: driver.mappedDataTypes.cacheQuery
+                                        }),
                                         isPrimary: false,
                                         isNullable: false
                                     },
                                     {
                                         name: "result",
-                                        type: driver.normalizeType({ type: driver.mappedDataTypes.cacheResult }),
+                                        type: driver.normalizeType({
+                                            type: driver.mappedDataTypes.cacheResult
+                                        }),
                                         isNullable: false
-                                    },
+                                    }
                                 ]
                             }))];
                     case 2:
@@ -120,7 +130,11 @@ var DbQueryResultCache = /** @class */ (function () {
         if (options.identifier) {
             return qb
                 .where(qb.escape("cache") + "." + qb.escape("identifier") + " = :identifier")
-                .setParameters({ identifier: this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver ? new MssqlParameter_1.MssqlParameter(options.identifier, "nvarchar") : options.identifier })
+                .setParameters({
+                identifier: this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver
+                    ? new MssqlParameter_1.MssqlParameter(options.identifier, "nvarchar")
+                    : options.identifier
+            })
                 .getRawOne();
         }
         else if (options.query) {
@@ -131,7 +145,11 @@ var DbQueryResultCache = /** @class */ (function () {
             }
             return qb
                 .where(qb.escape("cache") + "." + qb.escape("query") + " = :query")
-                .setParameters({ query: this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver ? new MssqlParameter_1.MssqlParameter(options.query, "nvarchar") : options.query })
+                .setParameters({
+                query: this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver
+                    ? new MssqlParameter_1.MssqlParameter(options.query, "nvarchar")
+                    : options.query
+            })
                 .getRawOne();
         }
         return Promise.resolve(undefined);
@@ -140,8 +158,14 @@ var DbQueryResultCache = /** @class */ (function () {
      * Checks if cache is expired or not.
      */
     DbQueryResultCache.prototype.isExpired = function (savedCache) {
-        var duration = typeof savedCache.duration === "string" ? parseInt(savedCache.duration) : savedCache.duration;
-        return ((typeof savedCache.time === "string" ? parseInt(savedCache.time) : savedCache.time) + duration) < new Date().getTime();
+        var duration = typeof savedCache.duration === "string"
+            ? parseInt(savedCache.duration)
+            : savedCache.duration;
+        return ((typeof savedCache.time === "string"
+            ? parseInt(savedCache.time)
+            : savedCache.time) +
+            duration <
+            new Date().getTime());
     };
     /**
      * Stores given query result in the cache.
@@ -154,13 +178,14 @@ var DbQueryResultCache = /** @class */ (function () {
                     case 0:
                         queryRunner = this.getQueryRunner(queryRunner);
                         insertedValues = options;
-                        if (this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver) { // todo: bad abstraction, re-implement this part, probably better if we create an entity metadata for cache table
+                        if (this.connection.driver instanceof SqlServerDriver_1.SqlServerDriver) {
+                            // todo: bad abstraction, re-implement this part, probably better if we create an entity metadata for cache table
                             insertedValues = {
                                 identifier: new MssqlParameter_1.MssqlParameter(options.identifier, "nvarchar"),
                                 time: new MssqlParameter_1.MssqlParameter(options.time, "bigint"),
                                 duration: new MssqlParameter_1.MssqlParameter(options.duration, "int"),
                                 query: new MssqlParameter_1.MssqlParameter(options.query, "nvarchar"),
-                                result: new MssqlParameter_1.MssqlParameter(options.result, "nvarchar"),
+                                result: new MssqlParameter_1.MssqlParameter(options.result, "nvarchar")
                             };
                         }
                         if (!(savedCache && savedCache.identifier)) return [3 /*break*/, 2];
@@ -168,7 +193,9 @@ var DbQueryResultCache = /** @class */ (function () {
                             .createQueryBuilder()
                             .update(this.queryResultCacheTable)
                             .set(insertedValues);
-                        qb.where(qb.escape("identifier") + " = :condition", { condition: insertedValues.identifier });
+                        qb.where(qb.escape("identifier") + " = :condition", {
+                            condition: insertedValues.identifier
+                        });
                         return [4 /*yield*/, qb.execute()];
                     case 1:
                         _a.sent();
@@ -180,16 +207,21 @@ var DbQueryResultCache = /** @class */ (function () {
                             .update(this.queryResultCacheTable)
                             .set(insertedValues);
                         if (this.connection.driver instanceof OracleDriver_1.OracleDriver) {
-                            qb.where("dbms_lob.compare(\"query\", :condition) = 0", { condition: insertedValues.query });
+                            qb.where("dbms_lob.compare(\"query\", :condition) = 0", {
+                                condition: insertedValues.query
+                            });
                         }
                         else {
-                            qb.where(qb.escape("query") + " = :condition", { condition: insertedValues.query });
+                            qb.where(qb.escape("query") + " = :condition", {
+                                condition: insertedValues.query
+                            });
                         }
                         return [4 /*yield*/, qb.execute()];
                     case 3:
                         _a.sent();
                         return [3 /*break*/, 6];
-                    case 4: // otherwise insert
+                    case 4: 
+                    // otherwise insert
                     return [4 /*yield*/, queryRunner.manager
                             .createQueryBuilder()
                             .insert()
@@ -197,6 +229,7 @@ var DbQueryResultCache = /** @class */ (function () {
                             .values(insertedValues)
                             .execute()];
                     case 5:
+                        // otherwise insert
                         _a.sent();
                         _a.label = 6;
                     case 6: return [2 /*return*/];
@@ -217,17 +250,20 @@ var DbQueryResultCache = /** @class */ (function () {
     /**
      * Removes all cached results by given identifiers from cache.
      */
-    DbQueryResultCache.prototype.remove = function (identifiers, queryRunner) {
+    DbQueryResultCache.prototype.remove = function (identifiers, queryRunner, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var _this = this;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, Promise.all(identifiers.map(function (identifier) {
                             var qb = _this.getQueryRunner(queryRunner).manager.createQueryBuilder();
-                            return qb.delete()
+                            return qb
+                                .delete()
                                 .from(_this.queryResultCacheTable)
-                                .where(qb.escape("identifier") + " = :identifier", { identifier: identifier })
-                                .execute();
+                                .where(qb.escape("identifier") + " = :identifier", {
+                                identifier: identifier
+                            })
+                                .execute(userLogin);
                         }))];
                     case 1:
                         _a.sent();

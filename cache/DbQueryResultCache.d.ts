@@ -42,7 +42,7 @@ export declare class DbQueryResultCache implements QueryResultCache {
     /**
      * Removes all cached results by given identifiers from cache.
      */
-    remove(identifiers: string[], queryRunner?: QueryRunner): Promise<void>;
+    remove(identifiers: string[], queryRunner?: QueryRunner, userLogin?: string): Promise<void>;
     /**
      * Gets a query runner to work with.
      */
