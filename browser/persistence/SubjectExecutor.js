@@ -156,11 +156,11 @@ var SubjectExecutor = /** @class */ (function () {
         var _this = this;
         var result = new BroadcasterResult();
         if (this.insertSubjects.length)
-            this.insertSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeInsertEvent(result, subject.metadata, subject.entity); });
+            this.insertSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeInsertEvent(result, subject.metadata, subject.entity || subject.identifier); });
         if (this.updateSubjects.length)
-            this.updateSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeUpdateEvent(result, subject.metadata, subject.entity, subject.databaseEntity, subject.diffColumns, subject.diffRelations); });
+            this.updateSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeUpdateEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, subject.diffColumns, subject.diffRelations); });
         if (this.removeSubjects.length)
-            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeRemoveEvent(result, subject.metadata, subject.entity, subject.databaseEntity); });
+            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeRemoveEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity); });
         return result;
     };
     /**
