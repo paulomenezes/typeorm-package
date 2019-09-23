@@ -53,13 +53,13 @@ export declare class SubjectExecutor {
     /**
      * Broadcasts "BEFORE_INSERT", "BEFORE_UPDATE", "BEFORE_REMOVE" events for all given subjects.
      */
-    protected broadcastBeforeEventsForAll(): BroadcasterResult;
+    protected broadcastBeforeEventsForAll(userLogin: string): BroadcasterResult;
     /**
      * Broadcasts "AFTER_INSERT", "AFTER_UPDATE", "AFTER_REMOVE" events for all given subjects.
      * Returns void if there wasn't any listener or subscriber executed.
      * Note: this method has a performance-optimized code organization.
      */
-    protected broadcastAfterEventsForAll(): BroadcasterResult;
+    protected broadcastAfterEventsForAll(userLogin: string): BroadcasterResult;
     /**
      * Executes insert operations.
      */

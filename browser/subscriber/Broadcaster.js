@@ -224,7 +224,7 @@ var Broadcaster = /** @class */ (function () {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    Broadcaster.prototype.broadcastAfterRemoveEvent = function (result, metadata, entity, databaseEntity) {
+    Broadcaster.prototype.broadcastAfterRemoveEvent = function (result, metadata, entity, databaseEntity, userLogin) {
         var _this = this;
         if (entity && metadata.afterRemoveListeners.length) {
             metadata.afterRemoveListeners.forEach(function (listener) {
@@ -247,7 +247,8 @@ var Broadcaster = /** @class */ (function () {
                         entity: entity,
                         metadata: metadata,
                         databaseEntity: databaseEntity,
-                        entityId: metadata.getEntityIdMixedMap(databaseEntity)
+                        entityId: metadata.getEntityIdMixedMap(databaseEntity),
+                        userLogin: userLogin
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);

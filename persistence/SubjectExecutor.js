@@ -64,7 +64,7 @@ var SubjectExecutor = /** @class */ (function () {
                         broadcasterResult = undefined;
                         if (!(!this.options || this.options.listeners !== false)) return [3 /*break*/, 2];
                         // console.time(".broadcastBeforeEventsForAll");
-                        broadcasterResult = this.broadcastBeforeEventsForAll();
+                        broadcasterResult = this.broadcastBeforeEventsForAll(userLogin);
                         if (!(broadcasterResult.promises.length > 0)) return [3 /*break*/, 2];
                         return [4 /*yield*/, Promise.all(broadcasterResult.promises)];
                     case 1:
@@ -118,7 +118,7 @@ var SubjectExecutor = /** @class */ (function () {
                         _a.sent();
                         if (!(!this.options || this.options.listeners !== false)) return [3 /*break*/, 8];
                         // console.time(".broadcastAfterEventsForAll");
-                        broadcasterResult = this.broadcastAfterEventsForAll();
+                        broadcasterResult = this.broadcastAfterEventsForAll(userLogin);
                         if (!(broadcasterResult.promises.length > 0)) return [3 /*break*/, 8];
                         return [4 /*yield*/, Promise.all(broadcasterResult.promises)];
                     case 7:
@@ -154,15 +154,15 @@ var SubjectExecutor = /** @class */ (function () {
     /**
      * Broadcasts "BEFORE_INSERT", "BEFORE_UPDATE", "BEFORE_REMOVE" events for all given subjects.
      */
-    SubjectExecutor.prototype.broadcastBeforeEventsForAll = function () {
+    SubjectExecutor.prototype.broadcastBeforeEventsForAll = function (userLogin) {
         var _this = this;
         var result = new BroadcasterResult_1.BroadcasterResult();
         if (this.insertSubjects.length)
-            this.insertSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeInsertEvent(result, subject.metadata, subject.entity || subject.identifier); });
+            this.insertSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeInsertEvent(result, subject.metadata, subject.entity || subject.identifier, userLogin); });
         if (this.updateSubjects.length)
-            this.updateSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeUpdateEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, subject.diffColumns, subject.diffRelations); });
+            this.updateSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeUpdateEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, subject.diffColumns, subject.diffRelations, userLogin); });
         if (this.removeSubjects.length)
-            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeRemoveEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity); });
+            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastBeforeRemoveEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, undefined, userLogin); });
         return result;
     };
     /**
@@ -170,15 +170,15 @@ var SubjectExecutor = /** @class */ (function () {
      * Returns void if there wasn't any listener or subscriber executed.
      * Note: this method has a performance-optimized code organization.
      */
-    SubjectExecutor.prototype.broadcastAfterEventsForAll = function () {
+    SubjectExecutor.prototype.broadcastAfterEventsForAll = function (userLogin) {
         var _this = this;
         var result = new BroadcasterResult_1.BroadcasterResult();
         if (this.insertSubjects.length)
-            this.insertSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterInsertEvent(result, subject.metadata, subject.entity || subject.identifier); });
+            this.insertSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterInsertEvent(result, subject.metadata, subject.entity || subject.identifier, userLogin); });
         if (this.updateSubjects.length)
-            this.updateSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterUpdateEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, subject.diffColumns, subject.diffRelations); });
+            this.updateSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterUpdateEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, subject.diffColumns, subject.diffRelations, userLogin); });
         if (this.removeSubjects.length)
-            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterRemoveEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity); });
+            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterRemoveEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, userLogin); });
         return result;
     };
     /**
