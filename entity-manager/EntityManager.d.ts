@@ -155,32 +155,32 @@ export declare class EntityManager {
      * Saves all given entities in the database.
      * If entities do not exist in the database then inserts, otherwise updates.
      */
-    save<Entity>(entities: Entity[], options?: SaveOptions): Promise<Entity[]>;
+    save<Entity>(entities: Entity[], options?: SaveOptions, userLogin?: string): Promise<Entity[]>;
     /**
      * Saves all given entities in the database.
      * If entities do not exist in the database then inserts, otherwise updates.
      */
-    save<Entity>(entity: Entity, options?: SaveOptions): Promise<Entity>;
+    save<Entity>(entity: Entity, options?: SaveOptions, userLogin?: string): Promise<Entity>;
     /**
      * Saves all given entities in the database.
      * If entities do not exist in the database then inserts, otherwise updates.
      */
-    save<Entity, T extends DeepPartial<Entity>>(targetOrEntity: ObjectType<Entity> | EntitySchema<Entity>, entities: T[], options?: SaveOptions): Promise<T[]>;
+    save<Entity, T extends DeepPartial<Entity>>(targetOrEntity: ObjectType<Entity> | EntitySchema<Entity>, entities: T[], options?: SaveOptions, userLogin?: string): Promise<T[]>;
     /**
      * Saves all given entities in the database.
      * If entities do not exist in the database then inserts, otherwise updates.
      */
-    save<Entity, T extends DeepPartial<Entity>>(targetOrEntity: ObjectType<Entity> | EntitySchema<Entity>, entity: T, options?: SaveOptions): Promise<T>;
+    save<Entity, T extends DeepPartial<Entity>>(targetOrEntity: ObjectType<Entity> | EntitySchema<Entity>, entity: T, options?: SaveOptions, userLogin?: string): Promise<T>;
     /**
      * Saves all given entities in the database.
      * If entities do not exist in the database then inserts, otherwise updates.
      */
-    save<T>(targetOrEntity: string, entities: T[], options?: SaveOptions): Promise<T[]>;
+    save<T>(targetOrEntity: string, entities: T[], options?: SaveOptions, userLogin?: string): Promise<T[]>;
     /**
      * Saves all given entities in the database.
      * If entities do not exist in the database then inserts, otherwise updates.
      */
-    save<T>(targetOrEntity: string, entity: T, options?: SaveOptions): Promise<T>;
+    save<T>(targetOrEntity: string, entity: T, options?: SaveOptions, userLogin?: string): Promise<T>;
     /**
      * Removes a given entity from the database.
      */

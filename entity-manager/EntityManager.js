@@ -208,11 +208,11 @@ var EntityManager = /** @class */ (function () {
     /**
      * Saves a given entity in the database.
      */
-    EntityManager.prototype.save = function (targetOrEntity, maybeEntityOrOptions, maybeOptions, userLogin) {
+    EntityManager.prototype.save = function (targetOrEntity, maybeEntityOrOptions, maybeOptionsOrUserLogin, userLogin) {
         // normalize mixed parameters
         var target = (arguments.length > 1 && (targetOrEntity instanceof Function || targetOrEntity instanceof index_1.EntitySchema || typeof targetOrEntity === "string")) ? targetOrEntity : undefined;
         var entity = target ? maybeEntityOrOptions : targetOrEntity;
-        var options = target ? maybeOptions : maybeEntityOrOptions;
+        var options = target ? maybeOptionsOrUserLogin : maybeEntityOrOptions;
         if (target instanceof index_1.EntitySchema)
             target = target.options.name;
         // if user passed empty array of entities then we don't need to do anything
@@ -220,7 +220,7 @@ var EntityManager = /** @class */ (function () {
             return Promise.resolve(entity);
         // execute save operation
         return new EntityPersistExecutor_1.EntityPersistExecutor(this.connection, this.queryRunner, "save", target, entity, options)
-            .execute(userLogin || "")
+            .execute(userLogin ? userLogin : typeof maybeOptionsOrUserLogin === "string" ? maybeOptionsOrUserLogin : "")
             .then(function () { return entity; });
     };
     /**
