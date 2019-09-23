@@ -12,5 +12,5 @@ export declare class RelationRemover {
     /**
      * Performs remove operation on a relation.
      */
-    remove(value: any | any[]): Promise<void>;
+    remove(value: any | any[], userLogin: string): Promise<void>;
 }

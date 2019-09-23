@@ -17,5 +17,5 @@ export declare class EntityPersistExecutor {
     /**
      * Executes persistence operation ob given entity or entities.
      */
-    execute(): Promise<void>;
+    execute(userLogin: string): Promise<void>;
 }

@@ -9,5 +9,5 @@ export declare class MaterializedPathSubjectExecutor {
     /**
      * Executes operations when subject is being inserted.
      */
-    insert(subject: Subject): Promise<void>;
+    insert(subject: Subject, userLogin: string): Promise<void>;
 }

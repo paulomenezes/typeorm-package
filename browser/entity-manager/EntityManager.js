@@ -206,7 +206,7 @@ var EntityManager = /** @class */ (function () {
     /**
      * Saves a given entity in the database.
      */
-    EntityManager.prototype.save = function (targetOrEntity, maybeEntityOrOptions, maybeOptions) {
+    EntityManager.prototype.save = function (targetOrEntity, maybeEntityOrOptions, maybeOptions, userLogin) {
         // normalize mixed parameters
         var target = (arguments.length > 1 && (targetOrEntity instanceof Function || targetOrEntity instanceof EntitySchema || typeof targetOrEntity === "string")) ? targetOrEntity : undefined;
         var entity = target ? maybeEntityOrOptions : targetOrEntity;
@@ -218,13 +218,13 @@ var EntityManager = /** @class */ (function () {
             return Promise.resolve(entity);
         // execute save operation
         return new EntityPersistExecutor(this.connection, this.queryRunner, "save", target, entity, options)
-            .execute()
+            .execute(userLogin || "")
             .then(function () { return entity; });
     };
     /**
      * Removes a given entity from the database.
      */
-    EntityManager.prototype.remove = function (targetOrEntity, maybeEntityOrOptions, maybeOptions) {
+    EntityManager.prototype.remove = function (targetOrEntity, maybeEntityOrOptions, maybeOptions, userLogin) {
         // normalize mixed parameters
         var target = (arguments.length > 1 && (targetOrEntity instanceof Function || typeof targetOrEntity === "string")) ? targetOrEntity : undefined;
         var entity = target ? maybeEntityOrOptions : targetOrEntity;
@@ -234,7 +234,7 @@ var EntityManager = /** @class */ (function () {
             return Promise.resolve(entity);
         // execute save operation
         return new EntityPersistExecutor(this.connection, this.queryRunner, "remove", target, entity, options)
-            .execute()
+            .execute(userLogin || "")
             .then(function () { return entity; });
     };
     /**
@@ -244,7 +244,7 @@ var EntityManager = /** @class */ (function () {
      * Does not check if entity exist in the database, so query will fail if duplicate entity is being inserted.
      * You can execute bulk inserts using this method.
      */
-    EntityManager.prototype.insert = function (target, entity) {
+    EntityManager.prototype.insert = function (target, entity, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var results;
             var _this = this;
@@ -252,7 +252,7 @@ var EntityManager = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!(this.connection.driver instanceof OracleDriver && entity instanceof Array)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, Promise.all(entity.map(function (entity) { return _this.insert(target, entity); }))];
+                        return [4 /*yield*/, Promise.all(entity.map(function (entity) { return _this.insert(target, entity, userLogin); }))];
                     case 1:
                         results = _a.sent();
                         return [2 /*return*/, results.reduce(function (mergedResult, result) { return Object.assign(mergedResult, result); }, {})];
@@ -260,7 +260,7 @@ var EntityManager = /** @class */ (function () {
                             .insert()
                             .into(target)
                             .values(entity)
-                            .execute()];
+                            .execute(userLogin)];
                 }
             });
         });
@@ -272,7 +272,7 @@ var EntityManager = /** @class */ (function () {
      * Does not check if entity exist in the database.
      * Condition(s) cannot be empty.
      */
-    EntityManager.prototype.update = function (target, criteria, partialEntity) {
+    EntityManager.prototype.update = function (target, criteria, partialEntity, userLogin) {
         // if user passed empty criteria or empty list of criterias, then throw an error
         if (criteria === undefined ||
             criteria === null ||
@@ -288,14 +288,14 @@ var EntityManager = /** @class */ (function () {
                 .update(target)
                 .set(partialEntity)
                 .whereInIds(criteria)
-                .execute();
+                .execute(userLogin);
         }
         else {
             return this.createQueryBuilder()
                 .update(target)
                 .set(partialEntity)
                 .where(criteria)
-                .execute();
+                .execute(userLogin);
         }
     };
     /**
@@ -486,7 +486,7 @@ var EntityManager = /** @class */ (function () {
     /**
      * Increments some column by provided value of the entities matched given conditions.
      */
-    EntityManager.prototype.increment = function (entityClass, conditions, propertyPath, value) {
+    EntityManager.prototype.increment = function (entityClass, conditions, propertyPath, value, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var metadata, column, values;
             var _this = this;
@@ -508,14 +508,14 @@ var EntityManager = /** @class */ (function () {
                         .update(entityClass)
                         .set(values)
                         .where(conditions)
-                        .execute()];
+                        .execute(userLogin)];
             });
         });
     };
     /**
      * Decrements some column by provided value of the entities matched given conditions.
      */
-    EntityManager.prototype.decrement = function (entityClass, conditions, propertyPath, value) {
+    EntityManager.prototype.decrement = function (entityClass, conditions, propertyPath, value, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var metadata, column, values;
             var _this = this;
@@ -537,7 +537,7 @@ var EntityManager = /** @class */ (function () {
                         .update(entityClass)
                         .set(values)
                         .where(conditions)
-                        .execute()];
+                        .execute(userLogin)];
             });
         });
     };

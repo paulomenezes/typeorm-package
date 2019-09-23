@@ -19,7 +19,7 @@ var RelationUpdater = /** @class */ (function () {
     /**
      * Performs set or add operation on a relation.
      */
-    RelationUpdater.prototype.update = function (value) {
+    RelationUpdater.prototype.update = function (value, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var relation, updateSet, updateSet_1, ofs, parameters_1, conditions_1, condition, of_1, updateSet, junctionMetadata_1, ofs, values, firstColumnValues, secondColumnValues_1, bulkInserted_1;
             var _this = this;
@@ -29,38 +29,50 @@ var RelationUpdater = /** @class */ (function () {
                         relation = this.expressionMap.relationMetadata;
                         if (!(relation.isManyToOne || relation.isOneToOneOwner)) return [3 /*break*/, 2];
                         updateSet = relation.joinColumns.reduce(function (updateSet, joinColumn) {
-                            var relationValue = value instanceof Object ? joinColumn.referencedColumn.getEntityValue(value) : value;
+                            var relationValue = value instanceof Object
+                                ? joinColumn.referencedColumn.getEntityValue(value)
+                                : value;
                             joinColumn.setEntityValue(updateSet, relationValue);
                             return updateSet;
                         }, {});
-                        if (!this.expressionMap.of || (this.expressionMap.of instanceof Array && !this.expressionMap.of.length))
+                        if (!this.expressionMap.of ||
+                            (this.expressionMap.of instanceof Array &&
+                                !this.expressionMap.of.length))
                             return [2 /*return*/];
                         return [4 /*yield*/, this.queryBuilder
                                 .createQueryBuilder()
                                 .update(relation.entityMetadata.target)
                                 .set(updateSet)
                                 .whereInIds(this.expressionMap.of)
-                                .execute()];
+                                .execute(userLogin)];
                     case 1:
                         _a.sent();
                         return [3 /*break*/, 10];
                     case 2:
-                        if (!((relation.isOneToOneNotOwner || relation.isOneToMany) && value === null)) return [3 /*break*/, 4];
+                        if (!((relation.isOneToOneNotOwner || relation.isOneToMany) &&
+                            value === null)) return [3 /*break*/, 4];
                         updateSet_1 = {};
                         relation.inverseRelation.joinColumns.forEach(function (column) {
                             updateSet_1[column.propertyName] = null;
                         });
-                        ofs = this.expressionMap.of instanceof Array ? this.expressionMap.of : [this.expressionMap.of];
+                        ofs = this.expressionMap.of instanceof Array
+                            ? this.expressionMap.of
+                            : [this.expressionMap.of];
                         parameters_1 = {};
                         conditions_1 = [];
                         ofs.forEach(function (of, ofIndex) {
                             relation.inverseRelation.joinColumns.map(function (column, columnIndex) {
                                 var parameterName = "joinColumn_" + ofIndex + "_" + columnIndex;
-                                parameters_1[parameterName] = of instanceof Object ? column.referencedColumn.getEntityValue(of) : of;
+                                parameters_1[parameterName] =
+                                    of instanceof Object
+                                        ? column.referencedColumn.getEntityValue(of)
+                                        : of;
                                 conditions_1.push(column.propertyPath + " = :" + parameterName);
                             });
                         });
-                        condition = conditions_1.map(function (str) { return "(" + str + ")"; }).join(" OR ");
+                        condition = conditions_1
+                            .map(function (str) { return "(" + str + ")"; })
+                            .join(" OR ");
                         if (!condition)
                             return [2 /*return*/];
                         return [4 /*yield*/, this.queryBuilder
@@ -69,7 +81,7 @@ var RelationUpdater = /** @class */ (function () {
                                 .set(updateSet_1)
                                 .where(condition)
                                 .setParameters(parameters_1)
-                                .execute()];
+                                .execute(userLogin)];
                     case 3:
                         _a.sent();
                         return [3 /*break*/, 10];
@@ -79,7 +91,9 @@ var RelationUpdater = /** @class */ (function () {
                             throw new Error("You cannot update relations of multiple entities with the same related object. Provide a single entity into .of method.");
                         of_1 = this.expressionMap.of;
                         updateSet = relation.inverseRelation.joinColumns.reduce(function (updateSet, joinColumn) {
-                            var relationValue = of_1 instanceof Object ? joinColumn.referencedColumn.getEntityValue(of_1) : of_1;
+                            var relationValue = of_1 instanceof Object
+                                ? joinColumn.referencedColumn.getEntityValue(of_1)
+                                : of_1;
                             joinColumn.setEntityValue(updateSet, relationValue);
                             return updateSet;
                         }, {});
@@ -90,25 +104,35 @@ var RelationUpdater = /** @class */ (function () {
                                 .update(relation.inverseEntityMetadata.target)
                                 .set(updateSet)
                                 .whereInIds(value)
-                                .execute()];
+                                .execute(userLogin)];
                     case 5:
                         _a.sent();
                         return [3 /*break*/, 10];
                     case 6:
                         junctionMetadata_1 = relation.junctionEntityMetadata;
-                        ofs = this.expressionMap.of instanceof Array ? this.expressionMap.of : [this.expressionMap.of];
+                        ofs = this.expressionMap.of instanceof Array
+                            ? this.expressionMap.of
+                            : [this.expressionMap.of];
                         values = value instanceof Array ? value : [value];
                         firstColumnValues = relation.isManyToManyOwner ? ofs : values;
-                        secondColumnValues_1 = relation.isManyToManyOwner ? values : ofs;
+                        secondColumnValues_1 = relation.isManyToManyOwner
+                            ? values
+                            : ofs;
                         bulkInserted_1 = [];
                         firstColumnValues.forEach(function (firstColumnVal) {
                             secondColumnValues_1.forEach(function (secondColumnVal) {
                                 var inserted = {};
                                 junctionMetadata_1.ownerColumns.forEach(function (column) {
-                                    inserted[column.databaseName] = firstColumnVal instanceof Object ? column.referencedColumn.getEntityValue(firstColumnVal) : firstColumnVal;
+                                    inserted[column.databaseName] =
+                                        firstColumnVal instanceof Object
+                                            ? column.referencedColumn.getEntityValue(firstColumnVal)
+                                            : firstColumnVal;
                                 });
                                 junctionMetadata_1.inverseColumns.forEach(function (column) {
-                                    inserted[column.databaseName] = secondColumnVal instanceof Object ? column.referencedColumn.getEntityValue(secondColumnVal) : secondColumnVal;
+                                    inserted[column.databaseName] =
+                                        secondColumnVal instanceof Object
+                                            ? column.referencedColumn.getEntityValue(secondColumnVal)
+                                            : secondColumnVal;
                                 });
                                 bulkInserted_1.push(inserted);
                             });
@@ -122,7 +146,7 @@ var RelationUpdater = /** @class */ (function () {
                                     .insert()
                                     .into(junctionMetadata_1.tableName)
                                     .values(value)
-                                    .execute();
+                                    .execute(userLogin);
                             }))];
                     case 7:
                         _a.sent();
@@ -132,7 +156,7 @@ var RelationUpdater = /** @class */ (function () {
                             .insert()
                             .into(junctionMetadata_1.tableName)
                             .values(bulkInserted_1)
-                            .execute()];
+                            .execute(userLogin)];
                     case 9:
                         _a.sent();
                         _a.label = 10;

@@ -55,7 +55,8 @@ var Repository = /** @class */ (function () {
             entityLikes[_i - 1] = arguments[_i];
         }
         var _a;
-        return (_a = this.manager).merge.apply(_a, tslib_1.__spread([this.metadata.target, mergeIntoEntity], entityLikes));
+        return (_a = this.manager).merge.apply(_a, tslib_1.__spread([this.metadata.target,
+            mergeIntoEntity], entityLikes));
     };
     /**
      * Creates a new entity from the given plan javascript object. If entity already exist in the database, then
@@ -87,8 +88,8 @@ var Repository = /** @class */ (function () {
      * Executes fast and efficient INSERT query.
      * Does not check if entity exist in the database, so query will fail if duplicate entity is being inserted.
      */
-    Repository.prototype.insert = function (entity) {
-        return this.manager.insert(this.metadata.target, entity);
+    Repository.prototype.insert = function (entity, userLogin) {
+        return this.manager.insert(this.metadata.target, entity, userLogin);
     };
     /**
      * Updates entity partially. Entity can be found by a given conditions.
@@ -96,8 +97,8 @@ var Repository = /** @class */ (function () {
      * Executes fast and efficient UPDATE query.
      * Does not check if entity exist in the database.
      */
-    Repository.prototype.update = function (criteria, partialEntity) {
-        return this.manager.update(this.metadata.target, criteria, partialEntity);
+    Repository.prototype.update = function (criteria, partialEntity, userLogin) {
+        return this.manager.update(this.metadata.target, criteria, partialEntity, userLogin);
     };
     /**
      * Deletes entities by a given criteria.
@@ -105,8 +106,8 @@ var Repository = /** @class */ (function () {
      * Executes fast and efficient DELETE query.
      * Does not check if entity exist in the database.
      */
-    Repository.prototype.delete = function (criteria) {
-        return this.manager.delete(this.metadata.target, criteria);
+    Repository.prototype.delete = function (criteria, userLogin) {
+        return this.manager.delete(this.metadata.target, criteria, userLogin);
     };
     /**
      * Counts entities that match given find options or conditions.
@@ -166,14 +167,14 @@ var Repository = /** @class */ (function () {
     /**
      * Increments some column by provided value of the entities matched given conditions.
      */
-    Repository.prototype.increment = function (conditions, propertyPath, value) {
-        return this.manager.increment(this.metadata.target, conditions, propertyPath, value);
+    Repository.prototype.increment = function (conditions, propertyPath, value, userLogin) {
+        return this.manager.increment(this.metadata.target, conditions, propertyPath, value, userLogin);
     };
     /**
      * Decrements some column by provided value of the entities matched given conditions.
      */
-    Repository.prototype.decrement = function (conditions, propertyPath, value) {
-        return this.manager.decrement(this.metadata.target, conditions, propertyPath, value);
+    Repository.prototype.decrement = function (conditions, propertyPath, value, userLogin) {
+        return this.manager.decrement(this.metadata.target, conditions, propertyPath, value, userLogin);
     };
     return Repository;
 }());

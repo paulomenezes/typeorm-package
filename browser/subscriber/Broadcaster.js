@@ -19,7 +19,7 @@ var Broadcaster = /** @class */ (function () {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    Broadcaster.prototype.broadcastBeforeInsertEvent = function (result, metadata, entity) {
+    Broadcaster.prototype.broadcastBeforeInsertEvent = function (result, metadata, entity, userLogin) {
         var _this = this;
         if (entity && metadata.beforeInsertListeners.length) {
             metadata.beforeInsertListeners.forEach(function (listener) {
@@ -40,7 +40,8 @@ var Broadcaster = /** @class */ (function () {
                         queryRunner: _this.queryRunner,
                         manager: _this.queryRunner.manager,
                         entity: entity,
-                        metadata: metadata
+                        metadata: metadata,
+                        userLogin: userLogin
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -57,7 +58,7 @@ var Broadcaster = /** @class */ (function () {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    Broadcaster.prototype.broadcastBeforeUpdateEvent = function (result, metadata, entity, databaseEntity, updatedColumns, updatedRelations) {
+    Broadcaster.prototype.broadcastBeforeUpdateEvent = function (result, metadata, entity, databaseEntity, updatedColumns, updatedRelations, userLogin) {
         var _this = this;
         // todo: send relations too?
         if (entity && metadata.beforeUpdateListeners.length) {
@@ -82,7 +83,8 @@ var Broadcaster = /** @class */ (function () {
                         metadata: metadata,
                         databaseEntity: databaseEntity,
                         updatedColumns: updatedColumns || [],
-                        updatedRelations: updatedRelations || []
+                        updatedRelations: updatedRelations || [],
+                        userLogin: userLogin
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -141,7 +143,7 @@ var Broadcaster = /** @class */ (function () {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    Broadcaster.prototype.broadcastAfterInsertEvent = function (result, metadata, entity) {
+    Broadcaster.prototype.broadcastAfterInsertEvent = function (result, metadata, entity, userLogin) {
         var _this = this;
         if (entity && metadata.afterInsertListeners.length) {
             metadata.afterInsertListeners.forEach(function (listener) {
@@ -162,7 +164,8 @@ var Broadcaster = /** @class */ (function () {
                         queryRunner: _this.queryRunner,
                         manager: _this.queryRunner.manager,
                         entity: entity,
-                        metadata: metadata
+                        metadata: metadata,
+                        userLogin: userLogin
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);
@@ -179,7 +182,7 @@ var Broadcaster = /** @class */ (function () {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    Broadcaster.prototype.broadcastAfterUpdateEvent = function (result, metadata, entity, databaseEntity, updatedColumns, updatedRelations) {
+    Broadcaster.prototype.broadcastAfterUpdateEvent = function (result, metadata, entity, databaseEntity, updatedColumns, updatedRelations, userLogin) {
         var _this = this;
         if (entity && metadata.afterUpdateListeners.length) {
             metadata.afterUpdateListeners.forEach(function (listener) {
@@ -203,7 +206,8 @@ var Broadcaster = /** @class */ (function () {
                         metadata: metadata,
                         databaseEntity: databaseEntity,
                         updatedColumns: updatedColumns || [],
-                        updatedRelations: updatedRelations || []
+                        updatedRelations: updatedRelations || [],
+                        userLogin: userLogin
                     });
                     if (executionResult instanceof Promise)
                         result.promises.push(executionResult);

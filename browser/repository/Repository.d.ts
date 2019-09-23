@@ -115,21 +115,21 @@ export declare class Repository<Entity extends ObjectLiteral> {
      * Executes fast and efficient INSERT query.
      * Does not check if entity exist in the database, so query will fail if duplicate entity is being inserted.
      */
-    insert(entity: QueryDeepPartialEntity<Entity> | (QueryDeepPartialEntity<Entity>[])): Promise<InsertResult>;
+    insert(entity: QueryDeepPartialEntity<Entity> | (QueryDeepPartialEntity<Entity>[]), userLogin: string): Promise<InsertResult>;
     /**
      * Updates entity partially. Entity can be found by a given conditions.
      * Unlike save method executes a primitive operation without cascades, relations and other operations included.
      * Executes fast and efficient UPDATE query.
      * Does not check if entity exist in the database.
      */
-    update(criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindConditions<Entity>, partialEntity: QueryDeepPartialEntity<Entity>): Promise<UpdateResult>;
+    update(criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindConditions<Entity>, partialEntity: QueryDeepPartialEntity<Entity>, userLogin: string): Promise<UpdateResult>;
     /**
      * Deletes entities by a given criteria.
      * Unlike save method executes a primitive operation without cascades, relations and other operations included.
      * Executes fast and efficient DELETE query.
      * Does not check if entity exist in the database.
      */
-    delete(criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindConditions<Entity>): Promise<DeleteResult>;
+    delete(criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindConditions<Entity>, userLogin: string): Promise<DeleteResult>;
     /**
      * Counts entities that match given options.
      */
@@ -207,9 +207,9 @@ export declare class Repository<Entity extends ObjectLiteral> {
     /**
      * Increments some column by provided value of the entities matched given conditions.
      */
-    increment(conditions: FindConditions<Entity>, propertyPath: string, value: number | string): Promise<UpdateResult>;
+    increment(conditions: FindConditions<Entity>, propertyPath: string, value: number | string, userLogin: string): Promise<UpdateResult>;
     /**
      * Decrements some column by provided value of the entities matched given conditions.
      */
-    decrement(conditions: FindConditions<Entity>, propertyPath: string, value: number | string): Promise<UpdateResult>;
+    decrement(conditions: FindConditions<Entity>, propertyPath: string, value: number | string, userLogin: string): Promise<UpdateResult>;
 }

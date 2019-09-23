@@ -33,7 +33,7 @@ var EntityPersistExecutor = /** @class */ (function () {
     /**
      * Executes persistence operation ob given entity or entities.
      */
-    EntityPersistExecutor.prototype.execute = function () {
+    EntityPersistExecutor.prototype.execute = function (userLogin) {
         var _this = this;
         // check if entity we are going to save is valid and is an object
         if (!this.entity || !(this.entity instanceof Object))
@@ -54,7 +54,9 @@ var EntityPersistExecutor = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, , 15, 18]);
                         entities = this.entity instanceof Array ? this.entity : [this.entity];
-                        entitiesInChunks = this.options && this.options.chunk && this.options.chunk > 0 ? OrmUtils_1.OrmUtils.chunk(entities, this.options.chunk) : [entities];
+                        entitiesInChunks = this.options && this.options.chunk && this.options.chunk > 0
+                            ? OrmUtils_1.OrmUtils.chunk(entities, this.options.chunk)
+                            : [entities];
                         return [4 /*yield*/, Promise.all(entitiesInChunks.map(function (entities) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
                                 var subjects, cascadesSubjectBuilder;
                                 var _this = this;
@@ -64,7 +66,9 @@ var EntityPersistExecutor = /** @class */ (function () {
                                             subjects = [];
                                             // create subjects for all entities we received for the persistence
                                             entities.forEach(function (entity) {
-                                                var entityTarget = _this.target ? _this.target : entity.constructor;
+                                                var entityTarget = _this.target
+                                                    ? _this.target
+                                                    : entity.constructor;
                                                 if (entityTarget === Object)
                                                     throw new CannotDetermineEntityError_1.CannotDetermineEntityError(_this.mode);
                                                 subjects.push(new Subject_1.Subject({
@@ -125,7 +129,9 @@ var EntityPersistExecutor = /** @class */ (function () {
                     case 3:
                         _a.trys.push([3, 9, , 14]);
                         if (!!queryRunner.isTransactionActive) return [3 /*break*/, 5];
-                        if (!(!this.options || this.options.transaction !== false)) return [3 /*break*/, 5];
+                        if (!(!this.options ||
+                            this.options.transaction !== false)) return [3 /*break*/, 5];
+                        // start transaction until it was not explicitly disabled
                         isTransactionStartedByUs = true;
                         return [4 /*yield*/, queryRunner.startTransaction()];
                     case 4:
@@ -134,7 +140,7 @@ var EntityPersistExecutor = /** @class */ (function () {
                     case 5: 
                     // execute all persistence operations for all entities we have
                     // console.time("executing subject executors...");
-                    return [4 /*yield*/, PromiseUtils_1.PromiseUtils.runInSequence(executorsWithExecutableOperations, function (executor) { return executor.execute(); })];
+                    return [4 /*yield*/, PromiseUtils_1.PromiseUtils.runInSequence(executorsWithExecutableOperations, function (executor) { return executor.execute(userLogin); })];
                     case 6:
                         // execute all persistence operations for all entities we have
                         // console.time("executing subject executors...");

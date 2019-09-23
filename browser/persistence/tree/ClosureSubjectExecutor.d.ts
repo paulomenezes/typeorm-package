@@ -20,7 +20,7 @@ export declare class ClosureSubjectExecutor {
     /**
      * Executes operations when subject is being inserted.
      */
-    insert(subject: Subject): Promise<void>;
+    insert(subject: Subject, userLogin: string): Promise<void>;
     /**
      * Gets escaped table name with schema name if SqlServer or Postgres driver used with custom
      * schema name, otherwise returns escaped table name.

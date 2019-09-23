@@ -28,4 +28,8 @@ export interface InsertEvent<Entity> {
      * Metadata of the entity.
      */
     metadata: EntityMetadata;
+    /**
+     * User who insert
+     */
+    userLogin?: string;
 }

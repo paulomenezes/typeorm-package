@@ -19,7 +19,7 @@ export declare class RelationQueryBuilder<Entity> extends QueryBuilder<Entity> {
      * Works only for many-to-one and one-to-one relations.
      * For many-to-many and one-to-many relations use #add and #remove methods instead.
      */
-    set(value: any): Promise<void>;
+    set(value: any, userLogin: string): Promise<void>;
     /**
      * Adds (binds) given value to entity relation.
      * Value can be entity, entity id or entity id map (if entity has composite ids).
@@ -27,7 +27,7 @@ export declare class RelationQueryBuilder<Entity> extends QueryBuilder<Entity> {
      * Works only for many-to-many and one-to-many relations.
      * For many-to-one and one-to-one use #set method instead.
      */
-    add(value: any | any[]): Promise<void>;
+    add(value: any | any[], userLogin: string): Promise<void>;
     /**
      * Removes (unbinds) given value from entity relation.
      * Value can be entity, entity id or entity id map (if entity has composite ids).
@@ -35,7 +35,7 @@ export declare class RelationQueryBuilder<Entity> extends QueryBuilder<Entity> {
      * Works only for many-to-many and one-to-many relations.
      * For many-to-one and one-to-one use #set method instead.
      */
-    remove(value: any | any[]): Promise<void>;
+    remove(value: any | any[], userLogin: string): Promise<void>;
     /**
      * Adds (binds) and removes (unbinds) given values to/from entity relation.
      * Value can be entity, entity id or entity id map (if entity has composite ids).
@@ -43,7 +43,7 @@ export declare class RelationQueryBuilder<Entity> extends QueryBuilder<Entity> {
      * Works only for many-to-many and one-to-many relations.
      * For many-to-one and one-to-one use #set method instead.
      */
-    addAndRemove(added: any | any[], removed: any | any[]): Promise<void>;
+    addAndRemove(added: any | any[], removed: any | any[], userLogin: string): Promise<void>;
     /**
      * Gets entity's relation id.
     async getId(): Promise<any> {

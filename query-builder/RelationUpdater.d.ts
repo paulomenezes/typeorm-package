@@ -12,5 +12,5 @@ export declare class RelationUpdater {
     /**
      * Performs set or add operation on a relation.
      */
-    update(value: any | any[]): Promise<void>;
+    update(value: any | any[], userLogin: string): Promise<void>;
 }

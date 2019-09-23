@@ -41,7 +41,7 @@ export declare class SubjectExecutor {
      * Executes all operations over given array of subjects.
      * Executes queries using given query runner.
      */
-    execute(): Promise<void>;
+    execute(userLogin: string): Promise<void>;
     /**
      * Validates all given subjects.
      */
@@ -63,17 +63,17 @@ export declare class SubjectExecutor {
     /**
      * Executes insert operations.
      */
-    protected executeInsertOperations(): Promise<void>;
+    protected executeInsertOperations(userLogin: string): Promise<void>;
     /**
      * Updates all given subjects in the database.
      */
-    protected executeUpdateOperations(): Promise<void>;
+    protected executeUpdateOperations(userLogin: string): Promise<void>;
     /**
      * Removes all given subjects from the database.
      *
      * todo: we need to apply topological sort here as well
      */
-    protected executeRemoveOperations(): Promise<void>;
+    protected executeRemoveOperations(userLogin: string): Promise<void>;
     /**
      * Updates all special columns of the saving entities (create date, update date, version, etc.).
      * Also updates nullable columns and columns with default values.

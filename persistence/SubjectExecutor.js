@@ -55,7 +55,7 @@ var SubjectExecutor = /** @class */ (function () {
      * Executes all operations over given array of subjects.
      * Executes queries using given query runner.
      */
-    SubjectExecutor.prototype.execute = function () {
+    SubjectExecutor.prototype.execute = function (userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var broadcasterResult;
             return tslib_1.__generator(this, function (_a) {
@@ -86,7 +86,7 @@ var SubjectExecutor = /** @class */ (function () {
                         // execute all insert operations
                         // console.time(".insertion");
                         this.insertSubjects = new SubjectTopoligicalSorter_1.SubjectTopoligicalSorter(this.insertSubjects).sort("insert");
-                        return [4 /*yield*/, this.executeInsertOperations()];
+                        return [4 /*yield*/, this.executeInsertOperations(userLogin)];
                     case 3:
                         _a.sent();
                         // console.timeEnd(".insertion");
@@ -95,7 +95,7 @@ var SubjectExecutor = /** @class */ (function () {
                         this.updateSubjects = this.allSubjects.filter(function (subject) { return subject.mustBeUpdated; });
                         // execute update operations
                         // console.time(".updation");
-                        return [4 /*yield*/, this.executeUpdateOperations()];
+                        return [4 /*yield*/, this.executeUpdateOperations(userLogin)];
                     case 4:
                         // execute update operations
                         // console.time(".updation");
@@ -104,7 +104,7 @@ var SubjectExecutor = /** @class */ (function () {
                         // make sure our remove subjects are sorted (using topological sorting) when multiple entities are passed for the removal
                         // console.time(".removal");
                         this.removeSubjects = new SubjectTopoligicalSorter_1.SubjectTopoligicalSorter(this.removeSubjects).sort("delete");
-                        return [4 /*yield*/, this.executeRemoveOperations()];
+                        return [4 /*yield*/, this.executeRemoveOperations(userLogin)];
                     case 5:
                         _a.sent();
                         // console.timeEnd(".removal");
@@ -184,7 +184,7 @@ var SubjectExecutor = /** @class */ (function () {
     /**
      * Executes insert operations.
      */
-    SubjectExecutor.prototype.executeInsertOperations = function () {
+    SubjectExecutor.prototype.executeInsertOperations = function (userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var _a, groupedInsertSubjects, groupedInsertSubjectKeys;
             var _this = this;
@@ -259,7 +259,7 @@ var SubjectExecutor = /** @class */ (function () {
                                                     .values(bulkInsertMaps)
                                                     .updateEntity(this.options && this.options.reload === false ? false : true)
                                                     .callListeners(false)
-                                                    .execute()];
+                                                    .execute(userLogin)];
                                         case 3:
                                             insertResult_2 = _a.sent();
                                             bulkInsertSubjects.forEach(function (subject, index) {
@@ -288,7 +288,7 @@ var SubjectExecutor = /** @class */ (function () {
                                                                     .values(subject.insertedValueSet)
                                                                     .updateEntity(this.options && this.options.reload === false ? false : true)
                                                                     .callListeners(false)
-                                                                    .execute()
+                                                                    .execute(userLogin)
                                                                     .then(function (insertResult) {
                                                                     subject.identifier = insertResult.identifiers[0];
                                                                     subject.generatedMap = insertResult.generatedMaps[0];
@@ -296,13 +296,13 @@ var SubjectExecutor = /** @class */ (function () {
                                                             case 3:
                                                                 _a.sent();
                                                                 if (!(subject.metadata.treeType === "closure-table")) return [3 /*break*/, 5];
-                                                                return [4 /*yield*/, new ClosureSubjectExecutor_1.ClosureSubjectExecutor(this.queryRunner).insert(subject)];
+                                                                return [4 /*yield*/, new ClosureSubjectExecutor_1.ClosureSubjectExecutor(this.queryRunner).insert(subject, userLogin)];
                                                             case 4:
                                                                 _a.sent();
                                                                 return [3 /*break*/, 7];
                                                             case 5:
                                                                 if (!(subject.metadata.treeType === "materialized-path")) return [3 /*break*/, 7];
-                                                                return [4 /*yield*/, new MaterializedPathSubjectExecutor_1.MaterializedPathSubjectExecutor(this.queryRunner).insert(subject)];
+                                                                return [4 /*yield*/, new MaterializedPathSubjectExecutor_1.MaterializedPathSubjectExecutor(this.queryRunner).insert(subject, userLogin)];
                                                             case 6:
                                                                 _a.sent();
                                                                 _a.label = 7;
@@ -340,7 +340,7 @@ var SubjectExecutor = /** @class */ (function () {
     /**
      * Updates all given subjects in the database.
      */
-    SubjectExecutor.prototype.executeUpdateOperations = function () {
+    SubjectExecutor.prototype.executeUpdateOperations = function (userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var _this = this;
             return tslib_1.__generator(this, function (_a) {
@@ -384,7 +384,7 @@ var SubjectExecutor = /** @class */ (function () {
                                         else { // in this case identifier is just conditions object to update by
                                             updateQueryBuilder.where(subject.identifier);
                                         }
-                                        return [4 /*yield*/, updateQueryBuilder.execute()];
+                                        return [4 /*yield*/, updateQueryBuilder.execute(userLogin)];
                                     case 3:
                                         updateResult = _a.sent();
                                         subject.generatedMap = updateResult.generatedMaps[0];
@@ -414,7 +414,7 @@ var SubjectExecutor = /** @class */ (function () {
      *
      * todo: we need to apply topological sort here as well
      */
-    SubjectExecutor.prototype.executeRemoveOperations = function () {
+    SubjectExecutor.prototype.executeRemoveOperations = function (userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var _a, groupedRemoveSubjects, groupedRemoveSubjectKeys;
             var _this = this;
@@ -451,7 +451,7 @@ var SubjectExecutor = /** @class */ (function () {
                                                 .from(subjects[0].metadata.target)
                                                 .where(deleteMaps)
                                                 .callListeners(false)
-                                                .execute()];
+                                                .execute(userLogin)];
                                         case 3:
                                             // here we execute our deletion query
                                             // we don't need to specify entities and set update entity to true since the only thing query builder

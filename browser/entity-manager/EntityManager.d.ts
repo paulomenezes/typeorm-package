@@ -220,7 +220,7 @@ export declare class EntityManager {
      * Does not check if entity exist in the database, so query will fail if duplicate entity is being inserted.
      * You can execute bulk inserts using this method.
      */
-    insert<Entity>(target: ObjectType<Entity> | EntitySchema<Entity> | string, entity: QueryDeepPartialEntity<Entity> | (QueryDeepPartialEntity<Entity>[])): Promise<InsertResult>;
+    insert<Entity>(target: ObjectType<Entity> | EntitySchema<Entity> | string, entity: QueryDeepPartialEntity<Entity> | (QueryDeepPartialEntity<Entity>[]), userLogin: string): Promise<InsertResult>;
     /**
      * Updates entity partially. Entity can be found by a given condition(s).
      * Unlike save method executes a primitive operation without cascades, relations and other operations included.
@@ -228,7 +228,7 @@ export declare class EntityManager {
      * Does not check if entity exist in the database.
      * Condition(s) cannot be empty.
      */
-    update<Entity>(target: ObjectType<Entity> | EntitySchema<Entity> | string, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | any, partialEntity: QueryDeepPartialEntity<Entity>): Promise<UpdateResult>;
+    update<Entity>(target: ObjectType<Entity> | EntitySchema<Entity> | string, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | any, partialEntity: QueryDeepPartialEntity<Entity>, userLogin: string): Promise<UpdateResult>;
     /**
      * Deletes entities by a given condition(s).
      * Unlike save method executes a primitive operation without cascades, relations and other operations included.
@@ -236,7 +236,7 @@ export declare class EntityManager {
      * Does not check if entity exist in the database.
      * Condition(s) cannot be empty.
      */
-    delete<Entity>(targetOrEntity: ObjectType<Entity> | EntitySchema<Entity> | string, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | any, userLogin?: string): Promise<DeleteResult>;
+    delete<Entity>(targetOrEntity: ObjectType<Entity> | EntitySchema<Entity> | string, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | any, userLogin: string): Promise<DeleteResult>;
     /**
      * Counts entities that match given options.
      * Useful for pagination.
@@ -439,11 +439,11 @@ export declare class EntityManager {
     /**
      * Increments some column by provided value of the entities matched given conditions.
      */
-    increment<Entity>(entityClass: ObjectType<Entity> | EntitySchema<Entity> | string, conditions: any, propertyPath: string, value: number | string): Promise<UpdateResult>;
+    increment<Entity>(entityClass: ObjectType<Entity> | EntitySchema<Entity> | string, conditions: any, propertyPath: string, value: number | string, userLogin: string): Promise<UpdateResult>;
     /**
      * Decrements some column by provided value of the entities matched given conditions.
      */
-    decrement<Entity>(entityClass: ObjectType<Entity> | EntitySchema<Entity> | string, conditions: any, propertyPath: string, value: number | string): Promise<UpdateResult>;
+    decrement<Entity>(entityClass: ObjectType<Entity> | EntitySchema<Entity> | string, conditions: any, propertyPath: string, value: number | string, userLogin: string): Promise<UpdateResult>;
     /**
      * Gets repository for the given entity class or name.
      * If single database connection mode is used, then repository is obtained from the

@@ -23,7 +23,8 @@ var MigrationExecutor = /** @class */ (function () {
          */
         this.transaction = true;
         var options = this.connection.driver.options;
-        this.migrationsTableName = connection.options.migrationsTableName || "migrations";
+        this.migrationsTableName =
+            connection.options.migrationsTableName || "migrations";
         this.migrationsTable = this.connection.driver.buildTableName(this.migrationsTableName, options.schema, options.database);
     }
     // -------------------------------------------------------------------------
@@ -143,11 +144,14 @@ var MigrationExecutor = /** @class */ (function () {
                     case 7:
                         _a.trys.push([7, 11, 16, 19]);
                         return [4 /*yield*/, PromiseUtils.runInSequence(pendingMigrations, function (migration) {
-                                return migration.instance.up(queryRunner)
+                                return migration
+                                    .instance.up(queryRunner)
                                     .then(function () {
+                                    // now when migration is executed we need to insert record about it into the database
                                     return _this.insertExecutedMigration(queryRunner, migration);
                                 })
                                     .then(function () {
+                                    // informative log about migration success
                                     successMigrations.push(migration);
                                     _this.connection.logger.logSchemaBuild("Migration " + migration.name + " has been executed successfully.");
                                 });
@@ -166,8 +170,10 @@ var MigrationExecutor = /** @class */ (function () {
                         _a.label = 12;
                     case 12:
                         _a.trys.push([12, 14, , 15]);
+                        // we throw original error even if rollback thrown an error
                         return [4 /*yield*/, queryRunner.rollbackTransaction()];
                     case 13:
+                        // we throw original error even if rollback thrown an error
                         _a.sent();
                         return [3 /*break*/, 15];
                     case 14:
@@ -247,8 +253,10 @@ var MigrationExecutor = /** @class */ (function () {
                         _a.label = 10;
                     case 10:
                         _a.trys.push([10, 12, , 13]);
+                        // we throw original error even if rollback thrown an error
                         return [4 /*yield*/, queryRunner.rollbackTransaction()];
                     case 11:
+                        // we throw original error even if rollback thrown an error
                         _a.sent();
                         return [3 /*break*/, 13];
                     case 12:
@@ -292,7 +300,10 @@ var MigrationExecutor = /** @class */ (function () {
                                 columns: [
                                     {
                                         name: "id",
-                                        type: this.connection.driver.normalizeType({ type: this.connection.driver.mappedDataTypes.migrationId }),
+                                        type: this.connection.driver.normalizeType({
+                                            type: this.connection.driver.mappedDataTypes
+                                                .migrationId
+                                        }),
                                         isGenerated: true,
                                         generationStrategy: "increment",
                                         isPrimary: true,
@@ -300,15 +311,21 @@ var MigrationExecutor = /** @class */ (function () {
                                     },
                                     {
                                         name: "timestamp",
-                                        type: this.connection.driver.normalizeType({ type: this.connection.driver.mappedDataTypes.migrationTimestamp }),
+                                        type: this.connection.driver.normalizeType({
+                                            type: this.connection.driver.mappedDataTypes
+                                                .migrationTimestamp
+                                        }),
                                         isPrimary: false,
                                         isNullable: false
                                     },
                                     {
                                         name: "name",
-                                        type: this.connection.driver.normalizeType({ type: this.connection.driver.mappedDataTypes.migrationName }),
+                                        type: this.connection.driver.normalizeType({
+                                            type: this.connection.driver.mappedDataTypes
+                                                .migrationName
+                                        }),
                                         isNullable: false
-                                    },
+                                    }
                                 ]
                             }))];
                     case 2:
@@ -330,7 +347,11 @@ var MigrationExecutor = /** @class */ (function () {
                     case 0:
                         if (!(this.connection.driver instanceof MongoDriver)) return [3 /*break*/, 2];
                         mongoRunner = queryRunner;
-                        return [4 /*yield*/, mongoRunner.databaseConnection.db(this.connection.driver.database).collection(this.migrationsTableName).find().toArray()];
+                        return [4 /*yield*/, mongoRunner.databaseConnection
+                                .db(this.connection.driver.database)
+                                .collection(this.migrationsTableName)
+                                .find()
+                                .toArray()];
                     case 1: return [2 /*return*/, _a.sent()];
                     case 2: return [4 /*yield*/, this.connection.manager
                             .createQueryBuilder(queryRunner)
@@ -364,14 +385,18 @@ var MigrationExecutor = /** @class */ (function () {
      * Finds the latest migration (sorts by timestamp) in the given array of migrations.
      */
     MigrationExecutor.prototype.getLatestTimestampMigration = function (migrations) {
-        var sortedMigrations = migrations.map(function (migration) { return migration; }).sort(function (a, b) { return (a.timestamp - b.timestamp) * -1; });
+        var sortedMigrations = migrations
+            .map(function (migration) { return migration; })
+            .sort(function (a, b) { return (a.timestamp - b.timestamp) * -1; });
         return sortedMigrations.length > 0 ? sortedMigrations[0] : undefined;
     };
     /**
      * Finds the latest migration (sorts by id) in the given array of migrations.
      */
     MigrationExecutor.prototype.getLatestExecutedMigration = function (migrations) {
-        var sortedMigrations = migrations.map(function (migration) { return migration; }).sort(function (a, b) { return ((a.id || 0) - (b.id || 0)) * -1; });
+        var sortedMigrations = migrations
+            .map(function (migration) { return migration; })
+            .sort(function (a, b) { return ((a.id || 0) - (b.id || 0)) * -1; });
         return sortedMigrations.length > 0 ? sortedMigrations[0] : undefined;
     };
     /**
@@ -385,8 +410,13 @@ var MigrationExecutor = /** @class */ (function () {
                     case 0:
                         values = {};
                         if (this.connection.driver instanceof SqlServerDriver) {
-                            values["timestamp"] = new MssqlParameter(migration.timestamp, this.connection.driver.normalizeType({ type: this.connection.driver.mappedDataTypes.migrationTimestamp }));
-                            values["name"] = new MssqlParameter(migration.name, this.connection.driver.normalizeType({ type: this.connection.driver.mappedDataTypes.migrationName }));
+                            values["timestamp"] = new MssqlParameter(migration.timestamp, this.connection.driver.normalizeType({
+                                type: this.connection.driver.mappedDataTypes
+                                    .migrationTimestamp
+                            }));
+                            values["name"] = new MssqlParameter(migration.name, this.connection.driver.normalizeType({
+                                type: this.connection.driver.mappedDataTypes.migrationName
+                            }));
                         }
                         else {
                             values["timestamp"] = migration.timestamp;
@@ -394,14 +424,18 @@ var MigrationExecutor = /** @class */ (function () {
                         }
                         if (!(this.connection.driver instanceof MongoDriver)) return [3 /*break*/, 1];
                         mongoRunner = queryRunner;
-                        mongoRunner.databaseConnection.db(this.connection.driver.database).collection(this.migrationsTableName).insert(values);
+                        mongoRunner.databaseConnection
+                            .db(this.connection.driver.database)
+                            .collection(this.migrationsTableName)
+                            .insert(values);
                         return [3 /*break*/, 3];
                     case 1:
                         qb = queryRunner.manager.createQueryBuilder();
-                        return [4 /*yield*/, qb.insert()
+                        return [4 /*yield*/, qb
+                                .insert()
                                 .into(this.migrationsTable)
                                 .values(values)
-                                .execute()];
+                                .execute("")];
                     case 2:
                         _a.sent();
                         _a.label = 3;
@@ -421,8 +455,13 @@ var MigrationExecutor = /** @class */ (function () {
                     case 0:
                         conditions = {};
                         if (this.connection.driver instanceof SqlServerDriver) {
-                            conditions["timestamp"] = new MssqlParameter(migration.timestamp, this.connection.driver.normalizeType({ type: this.connection.driver.mappedDataTypes.migrationTimestamp }));
-                            conditions["name"] = new MssqlParameter(migration.name, this.connection.driver.normalizeType({ type: this.connection.driver.mappedDataTypes.migrationName }));
+                            conditions["timestamp"] = new MssqlParameter(migration.timestamp, this.connection.driver.normalizeType({
+                                type: this.connection.driver.mappedDataTypes
+                                    .migrationTimestamp
+                            }));
+                            conditions["name"] = new MssqlParameter(migration.name, this.connection.driver.normalizeType({
+                                type: this.connection.driver.mappedDataTypes.migrationName
+                            }));
                         }
                         else {
                             conditions["timestamp"] = migration.timestamp;
@@ -430,16 +469,20 @@ var MigrationExecutor = /** @class */ (function () {
                         }
                         if (!(this.connection.driver instanceof MongoDriver)) return [3 /*break*/, 1];
                         mongoRunner = queryRunner;
-                        mongoRunner.databaseConnection.db(this.connection.driver.database).collection(this.migrationsTableName).deleteOne(conditions);
+                        mongoRunner.databaseConnection
+                            .db(this.connection.driver.database)
+                            .collection(this.migrationsTableName)
+                            .deleteOne(conditions);
                         return [3 /*break*/, 3];
                     case 1:
                         qb = queryRunner.manager.createQueryBuilder();
-                        return [4 /*yield*/, qb.delete()
+                        return [4 /*yield*/, qb
+                                .delete()
                                 .from(this.migrationsTable)
                                 .where(qb.escape("timestamp") + " = :timestamp")
                                 .andWhere(qb.escape("name") + " = :name")
                                 .setParameters(conditions)
-                                .execute()];
+                                .execute("")];
                     case 2:
                         _a.sent();
                         _a.label = 3;

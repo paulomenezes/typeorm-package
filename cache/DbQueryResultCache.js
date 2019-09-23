@@ -196,7 +196,7 @@ var DbQueryResultCache = /** @class */ (function () {
                         qb.where(qb.escape("identifier") + " = :condition", {
                             condition: insertedValues.identifier
                         });
-                        return [4 /*yield*/, qb.execute()];
+                        return [4 /*yield*/, qb.execute("")];
                     case 1:
                         _a.sent();
                         return [3 /*break*/, 6];
@@ -216,7 +216,7 @@ var DbQueryResultCache = /** @class */ (function () {
                                 condition: insertedValues.query
                             });
                         }
-                        return [4 /*yield*/, qb.execute()];
+                        return [4 /*yield*/, qb.execute("")];
                     case 3:
                         _a.sent();
                         return [3 /*break*/, 6];
@@ -227,7 +227,7 @@ var DbQueryResultCache = /** @class */ (function () {
                             .insert()
                             .into(this.queryResultCacheTable)
                             .values(insertedValues)
-                            .execute()];
+                            .execute("")];
                     case 5:
                         // otherwise insert
                         _a.sent();
@@ -263,7 +263,7 @@ var DbQueryResultCache = /** @class */ (function () {
                                 .where(qb.escape("identifier") + " = :identifier", {
                                 identifier: identifier
                             })
-                                .execute(userLogin);
+                                .execute(userLogin || "");
                         }))];
                     case 1:
                         _a.sent();

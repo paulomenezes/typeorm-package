@@ -42,4 +42,8 @@ export interface UpdateEvent<Entity> {
      * List of updated relations. In query builder has no affected
      */
     updatedRelations: RelationMetadata[];
+    /**
+     * User who update
+     */
+    userLogin?: string;
 }

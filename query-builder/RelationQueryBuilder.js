@@ -39,12 +39,13 @@ var RelationQueryBuilder = /** @class */ (function (_super) {
      * Works only for many-to-one and one-to-one relations.
      * For many-to-many and one-to-many relations use #add and #remove methods instead.
      */
-    RelationQueryBuilder.prototype.set = function (value) {
+    RelationQueryBuilder.prototype.set = function (value, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var relation, updater;
             return tslib_1.__generator(this, function (_a) {
                 relation = this.expressionMap.relationMetadata;
-                if (!this.expressionMap.of) // todo: move this check before relation query builder creation?
+                if (!this.expressionMap.of)
+                    // todo: move this check before relation query builder creation?
                     throw new Error("Entity whose relation needs to be set is not set. Use .of method to define whose relation you want to set.");
                 if (relation.isManyToMany || relation.isOneToMany)
                     throw new Error("Set operation is only supported for many-to-one and one-to-one relations. " +
@@ -53,10 +54,11 @@ var RelationQueryBuilder = /** @class */ (function (_super) {
                 // if there are multiple join columns then user must send id map as "value" argument. check if he really did it
                 if (relation.joinColumns &&
                     relation.joinColumns.length > 1 &&
-                    (!(value instanceof Object) || Object.keys(value).length < relation.joinColumns.length))
+                    (!(value instanceof Object) ||
+                        Object.keys(value).length < relation.joinColumns.length))
                     throw new Error("Value to be set into the relation must be a map of relation ids, for example: .set({ firstName: \"...\", lastName: \"...\" })");
                 updater = new RelationUpdater_1.RelationUpdater(this, this.expressionMap);
-                return [2 /*return*/, updater.update(value)];
+                return [2 /*return*/, updater.update(value, userLogin)];
             });
         });
     };
@@ -67,14 +69,15 @@ var RelationQueryBuilder = /** @class */ (function (_super) {
      * Works only for many-to-many and one-to-many relations.
      * For many-to-one and one-to-one use #set method instead.
      */
-    RelationQueryBuilder.prototype.add = function (value) {
+    RelationQueryBuilder.prototype.add = function (value, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var relation, updater;
             return tslib_1.__generator(this, function (_a) {
                 if (value instanceof Array && value.length === 0)
                     return [2 /*return*/];
                 relation = this.expressionMap.relationMetadata;
-                if (!this.expressionMap.of) // todo: move this check before relation query builder creation?
+                if (!this.expressionMap.of)
+                    // todo: move this check before relation query builder creation?
                     throw new Error("Entity whose relation needs to be set is not set. Use .of method to define whose relation you want to set.");
                 if (relation.isManyToOne || relation.isOneToOne)
                     throw new Error("Add operation is only supported for many-to-many and one-to-many relations. " +
@@ -83,10 +86,11 @@ var RelationQueryBuilder = /** @class */ (function (_super) {
                 // if there are multiple join columns then user must send id map as "value" argument. check if he really did it
                 if (relation.joinColumns &&
                     relation.joinColumns.length > 1 &&
-                    (!(value instanceof Object) || Object.keys(value).length < relation.joinColumns.length))
+                    (!(value instanceof Object) ||
+                        Object.keys(value).length < relation.joinColumns.length))
                     throw new Error("Value to be set into the relation must be a map of relation ids, for example: .set({ firstName: \"...\", lastName: \"...\" })");
                 updater = new RelationUpdater_1.RelationUpdater(this, this.expressionMap);
-                return [2 /*return*/, updater.update(value)];
+                return [2 /*return*/, updater.update(value, userLogin)];
             });
         });
     };
@@ -97,21 +101,22 @@ var RelationQueryBuilder = /** @class */ (function (_super) {
      * Works only for many-to-many and one-to-many relations.
      * For many-to-one and one-to-one use #set method instead.
      */
-    RelationQueryBuilder.prototype.remove = function (value) {
+    RelationQueryBuilder.prototype.remove = function (value, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var relation, remover;
             return tslib_1.__generator(this, function (_a) {
                 if (value instanceof Array && value.length === 0)
                     return [2 /*return*/];
                 relation = this.expressionMap.relationMetadata;
-                if (!this.expressionMap.of) // todo: move this check before relation query builder creation?
+                if (!this.expressionMap.of)
+                    // todo: move this check before relation query builder creation?
                     throw new Error("Entity whose relation needs to be set is not set. Use .of method to define whose relation you want to set.");
                 if (relation.isManyToOne || relation.isOneToOne)
                     throw new Error("Add operation is only supported for many-to-many and one-to-many relations. " +
                         ("However given \"" + relation.propertyPath + "\" has " + relation.relationType + " relation. ") +
                         "Use .set(null) method instead.");
                 remover = new RelationRemover_1.RelationRemover(this, this.expressionMap);
-                return [2 /*return*/, remover.remove(value)];
+                return [2 /*return*/, remover.remove(value, userLogin)];
             });
         });
     };
@@ -122,14 +127,14 @@ var RelationQueryBuilder = /** @class */ (function (_super) {
      * Works only for many-to-many and one-to-many relations.
      * For many-to-one and one-to-one use #set method instead.
      */
-    RelationQueryBuilder.prototype.addAndRemove = function (added, removed) {
+    RelationQueryBuilder.prototype.addAndRemove = function (added, removed, userLogin) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.remove(removed)];
+                    case 0: return [4 /*yield*/, this.remove(removed, userLogin)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.add(added)];
+                        return [4 /*yield*/, this.add(added, userLogin)];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];
