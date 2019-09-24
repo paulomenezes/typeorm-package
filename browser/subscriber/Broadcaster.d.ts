@@ -64,7 +64,7 @@ export declare class Broadcaster {
      *
      * Note: this method has a performance-optimized code organization, do not change code structure.
      */
-    broadcastAfterRemoveEvent(result: BroadcasterResult, metadata: EntityMetadata, entity?: ObjectLiteral, databaseEntity?: ObjectLiteral, userLogin?: string): void;
+    broadcastAfterRemoveEvent(result: BroadcasterResult, metadata: EntityMetadata, entity?: ObjectLiteral, databaseEntity?: ObjectLiteral, queryAndParameters?: [string, any[]], userLogin?: string): void;
     /**
      * Broadcasts "AFTER_LOAD" event for all given entities, and their sub-entities.
      * After load event is executed after entity has been loaded from the database.

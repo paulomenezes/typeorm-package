@@ -94,7 +94,7 @@ var DeleteQueryBuilder = /** @class */ (function (_super) {
                         if (!(this.expressionMap.callListeners === true &&
                             this.expressionMap.mainAlias.hasMetadata)) return [3 /*break*/, 8];
                         broadcastResult = new BroadcasterResult_1.BroadcasterResult();
-                        queryRunner.broadcaster.broadcastAfterRemoveEvent(broadcastResult, this.expressionMap.mainAlias.metadata);
+                        queryRunner.broadcaster.broadcastAfterRemoveEvent(broadcastResult, this.expressionMap.mainAlias.metadata, undefined, undefined, [sql, parameters], userLogin);
                         if (!(broadcastResult.promises.length > 0)) return [3 /*break*/, 8];
                         return [4 /*yield*/, Promise.all(broadcastResult.promises)];
                     case 7:

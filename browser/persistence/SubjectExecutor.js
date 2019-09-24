@@ -176,7 +176,7 @@ var SubjectExecutor = /** @class */ (function () {
         if (this.updateSubjects.length)
             this.updateSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterUpdateEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, subject.diffColumns, subject.diffRelations, userLogin); });
         if (this.removeSubjects.length)
-            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterRemoveEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, userLogin); });
+            this.removeSubjects.forEach(function (subject) { return _this.queryRunner.broadcaster.broadcastAfterRemoveEvent(result, subject.metadata, subject.entity || subject.identifier, subject.databaseEntity, undefined, userLogin); });
         return result;
     };
     /**
